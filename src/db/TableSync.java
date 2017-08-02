@@ -241,7 +241,7 @@ public class TableSync {
 	}
 	
 	private void insertBatchAndLog(PreparedStatement psInsert,long countSrc,int countOper,int countUpdate,long startTime) throws SQLException{
-		final String tip="已扫描源表：{0},完成：{1}%,目标表更新：{2}，新增：{3}，耗时：{4}秒";
+		final String tip="已扫描源表：{0},完成：{1} %,目标表更新：{2}，新增：{3}，耗时：{4}秒";
 		psInsert.executeBatch();
 		destConn.commit();
 		TableSync.println(
@@ -252,7 +252,6 @@ public class TableSync {
 				countOper-countUpdate,(System.currentTimeMillis()-startTime)/1000)
 		);
 	}
-	
 	
 	private void assertNull(Object target,String msg){
 		if(target==null||target instanceof String && "".equals(target.toString().trim())){
@@ -293,12 +292,14 @@ public class TableSync {
 //		copy172_to_172test();
 //		copy10_to_10test();
 //		copy10_to_local();
+		copy_locallenovo_to_172test();
 //		copy172_to_local();
 //		copy10_to_172();
 //		copyLocal_to_172();
 //		copyLocal_to_10();
 //		dagl_informix2oracle();
-		dagl_informix61_2_oracle();
+//		dagl_informix61_2_oracle();
+//		copy172_to_10();//!!!慎重，生产环境
 //		dagl_informix61_framework_2_oracle();
 	}
 	
@@ -568,7 +569,113 @@ public class TableSync {
 		try {
 			Connection srcConn=DbcpUtil.getConnection("oracle_me_10");
 			Connection desConn=DbcpUtil.getConnection("oracle_me_localhost");
-			TableSync ins=new TableSync("ETPS.ETPS_MEMBER_ENTY", "ETPS.ETPS_MEMBER_ENTY", null, srcConn, desConn);
+//			select * from etps.etps_info_enty where AREA_ORGAN_ID like '530102%'
+			
+//			TableSync ins=new TableSync("ETPS.ETPS_MEMBER_ENTY", "ETPS.ETPS_MEMBER_ENTY", null, srcConn, desConn);
+//			String[] tables=new String[]{
+//				"DIC_FLOW",
+//				"DIC_FLOW_DATA",
+//				"DIC_LOAD_CONFIG",
+//				"ESF_ACTIVITY",
+//				"ESF_LOGIN_WIDGET",
+//				"ESF_MENU_SHORTCUT",
+//				"ESF_PERSONAL_CONFIG",
+//				"ESF_PORTAL_SETTING",
+//				"ESF_PUBLIC_NOTICE",
+//				"ESF_WIDGET",
+//				"ESF_WIDGET_SETTING",
+//				"ESF_XTK_NOTICE",
+//				"FL_ACT",
+//				"FL_ACT_AUTO",
+//				"FL_ACT_DAYS",
+//				"FL_ACT_PARAMETER",
+//				"FL_ACT_RELATION",
+//				"FL_ACT_USER",
+//				"FL_ACT_VIEW",
+//				"FL_INST",
+//				"FL_INST_CHANGE",
+//				"FL_PARAMETER",
+//				"FL_PATH",
+//				"MGR_COLUMN_INFO",
+//				"MGR_TABLE_INFO",
+//				"MGR_THREAD_INFO",
+//				"NET_USER",
+//				"SPT_APPRAISE",
+//				"SPT_APP_INFO",
+//				"SPT_APP_INTEGRATE",
+//				"SPT_APP_VERSION",
+//				"SPT_ATTACHMENT",
+//				"SPT_AUDIT_EVENT",
+//				"SPT_AUDIT_INFO",
+//				"SPT_AUDIT_RULE",
+//				"SPT_AUTH",
+//				"SPT_AUTHG_USERG_MAPPING",
+//				"SPT_AUTHG_USER_MAPPING",
+//				"SPT_AUTH_AUTHG_MAPPING",
+//				"SPT_AUTH_ENTRUST",
+//				"SPT_AUTH_ENTRUST_DET",
+//				"SPT_AUTH_GROUP",
+//				"SPT_AUTH_OBJECT",
+//				"SPT_CHART_ITEM_RECORD",
+//				"SPT_CHART_RECORD",
+//				"SPT_DATA_FTP_CFG",
+//				"SPT_DATA_SERV_CFG",
+//				"SPT_DATA_SOURCE_CFG",
+//				"SPT_DEPT",
+//				"SPT_DEPT_HIS",
+//				"SPT_DEPT_USER",
+//				"SPT_DEPT_USER_HIS",
+//				"SPT_EQUI",
+//				"SPT_EQUIPMENT",
+//				"SPT_EQUI_USER",
+//				"SPT_EQ_SURE",
+//				"SPT_FAQ",
+//				"SPT_FRONT_FUNC",
+//				"SPT_FUNC",
+//				"SPT_FUNC_HELP",
+//				"SPT_HELP",
+//				"SPT_KA_MANAGE",
+//				"SPT_KA_RECORDS",
+//				"SPT_MENU",
+//				"SPT_MODULE",
+//				"SPT_MODULE_MENU",
+//				"SPT_OPER",
+//				"SPT_ORGAN",
+//				"SPT_ORGAN_HIS",
+//				"SPT_PAGE_ITEM",
+//				"SPT_PAGE_REGION",
+//				"SPT_PROBLEMS",
+//				"SPT_RECORDS",
+//				"SPT_SERIAL_NUMBER",
+//				"SPT_SERIAL_NUMBER_ITEM",
+//				"SPT_SINGLE_EXEC",
+//				"SPT_SOFTWARE",
+//				"SPT_TODO_CFG",
+//				"SPT_TODO_MESSAGE",
+//				"SPT_TOP_MODULE",
+//				"SPT_TRANSFER_FILE",
+//				"SPT_USER",
+//				"SPT_USERG_AUTH_MAPPING",
+//				"SPT_USER_AUTH_CACHE",
+//				"SPT_USER_AUTH_MAPPING",
+//				"SPT_USER_FILE_MAPPING",
+//				"SPT_USER_GROUP",
+//				"SPT_USER_HIS",
+//				"SPT_USER_PAGE_ITEM",
+//				"SPT_USER_USERG_MAPPING",
+//				"SPT_WORKDAY",
+//				"SYS_CONFIG"
+//			};
+//			for(String table:tables){
+//				TableSync ins=new TableSync("FGDJ."+table,"DAGL_YN."+table, null, srcConn, desConn);
+//				ins.execute();
+//			}
+			
+//			TableSync ins=new TableSync("select * from etps.etps_info_enty where AREA_ORGAN_ID like '530102%'", "etps.etps_info_enty",srcConn, desConn);
+//			ins.setPkName("ETPS_ID");
+			String srcSql="select x1.* from etps.etps_sh x1 ";
+			TableSync ins=new TableSync(srcSql, "etps.etps_sh",srcConn, desConn);
+			ins.setPkName("ETPS_ID");
 			ins.execute();
 		} catch (SQLException e) {
 			DbcpUtil.rollback("oracle_me_localhost");
@@ -614,6 +721,63 @@ public class TableSync {
 		
 	}
 	
+	private static void copy_locallenovo_to_172test(){
+		
+		try {
+			Connection srcConn=DbcpUtil.getConnection("lenovo_local");
+			Connection desConn=DbcpUtil.getConnection("oracle_me_172_test");
+//			TableSync ins=new TableSync("dagl.archv_config", "dagl.archv_config", null, srcConn, desConn);
+			String[] tables=new String[]{
+//				"dagl.DIC_APP_TYPE",
+//				"dagl.DIC_AREA",
+//				"dagl.DIC_AUTH",
+//				"dagl.DIC_CETF",
+//				"dagl.DIC_CHANGE",
+//				"dagl.DIC_CRNCY",
+//				"dagl.DIC_CTN_FORM_TYPE",
+//				"dagl.DIC_DOSSIER",
+//				"dagl.DIC_ETPS_TYPE",
+//				"dagl.DIC_ETPS_TYPE_GB",
+//				"dagl.DIC_FLOW",
+//				"dagl.DIC_FLOW_DATA",
+//				"dagl.DIC_FOLDER",
+//				"dagl.DIC_INDUSTRY_GB",
+//				"dagl.DIC_INVT_TYPE_GB",
+//				"dagl.DIC_LOAD_CONFIG",
+//				"dagl.DIC_MKT_TYPE",
+//				"dagl.DIC_NATION",
+//				"dagl.DIC_NATIONALITY",
+//				"dagl.DIC_OBJ_APP_TYPE",
+//				"dagl.DIC_OBJ_STATUS",
+//				"dagl.DIC_PAGE",
+//				"dagl.DIC_PE_ORIG_IDENT",
+//				"dagl.DIC_PROVINCE",
+//				"dagl.DIC_PUNISH_TYPE_GB",
+//				"dagl.DIC_RECORD",
+//				"dagl.DIC_SECRET_DEGREE",
+//				"dagl.DIC_SM",
+//				"dagl.DIC_SPCL_TRD_TYPE",
+//				"dagl.DIC_STOCK_MODE",
+//				"dagl.DIC_STORE_ROOM",
+//				"dagl.DIC_SUB_OBJ_TYPE",
+//				"dagl.DIC_SUPERVISE",
+//				"dagl.DIC_SURVEIL_SORT"	
+				"dagl.archv_sys_numbs"
+			};
+			for(String table:tables){
+				TableSync ins=new TableSync(table,table, null, srcConn, desConn);
+				ins.execute();
+			}
+		} catch (SQLException e) {
+			DbcpUtil.rollback("oracle_me_172_test");
+			e.printStackTrace();
+		} finally{
+			DbcpUtil.release("lenovo_local");
+			DbcpUtil.release("oracle_me_172_test");
+		}
+		
+	}
+	
 	private static void copy172_to_local(){
 		
 		try {
@@ -621,7 +785,10 @@ public class TableSync {
 			Connection desConn=DbcpUtil.getConnection("oracle_me_localhost");
 //			TableSync ins=new TableSync("ESF.SPT_ORGAN", "ME_BAK.SPT_ORGAN_GS_BAK", null, srcConn, desConn);
 //			TableSync ins=new TableSync("ME.ME_NUMBER_LIMIT", "ME_BAK.ME_NUMBER_LIMIT", null, srcConn, desConn);
-			TableSync ins=new TableSync("ME.ME_SUPPORT_INFO", "ME_BAK.ME_SUPPORT_INFO", null, srcConn, desConn);
+//			TableSync ins=new TableSync("ME.ME_SUPPORT_INFO", "ME_BAK.ME_SUPPORT_INFO", null, srcConn, desConn);
+//			TableSync ins=new TableSync(" select * from etps.etps_info_enty where area_organ_id like '5329%' ", "etps.etps_info_enty", srcConn, desConn);
+			TableSync ins=new TableSync(" select * from etps.etps_sh ", "etps.etps_sh", srcConn, desConn);
+			ins.setPkName("ETPS_ID");
 			ins.execute();
 		} catch (SQLException e) {
 			DbcpUtil.rollback("oracle_me_localhost");
@@ -634,11 +801,24 @@ public class TableSync {
 	}
 	
 	private static void copy172_to_10(){
-		
 		try {
 			Connection srcConn=DbcpUtil.getConnection("oracle_me_172");
 			Connection desConn=DbcpUtil.getConnection("oracle_me_10");
-			TableSync ins=new TableSync("ME.me_entity_info", "ME.me_entity_info", null, srcConn, desConn);
+			String selectSql="select ENT_ID, "+
+				"PRI_PID, "+
+				"UNI_SCID, "+
+				"REG_NO, "+
+				"ETPS_NAME, "+
+				"SUB_OBJ_TYPE, "+
+				"ETPS_TYPE_GB, "+
+				"ESTABLISH_DATE, "+
+				"CPTL_TOTAL, "+
+				"REG_ORGAN_ID, "+
+				"INDUSTRY_PHY, "+
+				"INDUSTRY_CODE, "+
+				"VALIDITY from ME.me_entity_info where ESTABLISH_DATE>to_date('20170201','yyyymmdd')";
+			TableSync ins=new TableSync(selectSql, "ME.me_entity_info", srcConn, desConn);
+			ins.setPkName("ENT_ID");
 			ins.execute();
 		} catch (SQLException e) {
 			DbcpUtil.rollback("oracle_me_10");
@@ -647,7 +827,6 @@ public class TableSync {
 			DbcpUtil.release("oracle_me_172");
 			DbcpUtil.release("oracle_me_10");
 		}
-		
 	}
 	
 	private static void copyLocal_to_172(){
@@ -666,4 +845,30 @@ public class TableSync {
 		}
 		
 	}
+
+	public void setSrcTable(String srcTable) {
+		this.srcTable = srcTable;
+	}
+
+	public void setDestTable(String destTable) {
+		this.destTable = destTable;
+	}
+
+	public void setPkName(String pkName) {
+		this.pkName = pkName;
+	}
+
+	public void setSrcConn(Connection srcConn) {
+		this.srcConn = srcConn;
+	}
+
+	public void setDestConn(Connection destConn) {
+		this.destConn = destConn;
+	}
+
+	public void setSelectSql(String selectSql) {
+		this.selectSql = selectSql;
+	}
+	
+
 }
