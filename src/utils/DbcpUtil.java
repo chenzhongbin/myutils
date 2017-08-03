@@ -25,7 +25,7 @@ public class DbcpUtil{
 	private static final String PROP_FILE_PATH="resources/jdbc.dbcputil.properties";
 	
 	private DbcpUtil(){}
-	
+	 
 	static {
 		init();
 	}

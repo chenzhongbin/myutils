@@ -549,7 +549,7 @@ public class TableSyncUtil {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		System.out.println("准备开始同步...");
+		System.out.println("准备开始同步..."); 
 		TableSyncUtil.executeSyncBatch("config","table_sync_config");
 		System.out.println("同步结束！");
 	}

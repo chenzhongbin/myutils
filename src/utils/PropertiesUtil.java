@@ -20,7 +20,7 @@ public class PropertiesUtil {
 			in.close();
 		} catch(Exception e){
 			e.printStackTrace();
-			return null;
+			return null; 
 		} finally{
 			try {
 				if(in!=null)
